@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Syrox Profil</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+
+    <style>
+        /* --- GENEL AYARLAR --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            font-family: 'Poppins', sans-serif; /* Genel yazılar için okunaklı font */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            /* Hareketli Siber Arka Plan */
+            background: linear-gradient(-45deg, #000000, #04041a, #001029, #000000);
+            background-size: 400% 400%;
+            animation: gradientBG 12s ease infinite;
+        }
+
+        @keyframes gradientBG {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        /* --- GİRİŞ EKRANI (Müzik Başlatıcı) --- */
+        #overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 999;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            transition: opacity 0.8s ease;
+            cursor: pointer;
+        }
+
+        .enter-btn {
+            font-family: 'Orbitron', sans-serif;
+            color: #00ffff;
+            background: rgba(0, 10, 30, 0.8);
+            font-size: 1.2rem;
+            border: 2px solid #00ffff;
+            padding: 15px 30px;
+            border-radius: 50px;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3), inset 0 0 10px rgba(0,255,255,0.1);
+            pointer-events: none;
+        }
+
+        .enter-text {
+            color: #888;
+            margin-top: 15px;
+            font-size: 0.9rem;
+            letter-spacing: 1px;
+            animation: blink 2s infinite;
+        }
+
+        @keyframes blink { 0%, 100% { opacity: 0.4; } 50% { opacity: 1; } }
+
+        /* --- ANA PROFİL KARTI --- */
+        .profile-card-container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 40px 30px;
+            max-width: 450px;
+            width: 90%;
+            
+            /* Cam ve Neon Efekti */
+            background: rgba(0, 15, 35, 0.6); /* Daha koyu, mavimsi cam */
+            backdrop-filter: blur(15px);
+            border-radius: 30px;
+            border: 1px solid rgba(0, 255, 255, 0.2);
+            box-shadow: 
+                0 0 40px rgba(0, 0, 0, 0.6), /* Koyu gölge */
+                0 0 15px rgba(0, 255, 255, 0.1); /* Hafif mavi dış parlama */
+            
+            opacity: 0;
+            transform: translateY(30px) scale(0.95);
+            transition: all 1s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        /* Ana Üst Başlık (SYROX) */
+        .main-header-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 3.5rem;
+            color: #fff;
+            font-weight: 900;
+            letter-spacing: 4px;
+            margin-bottom: 30px;
+            text-shadow: 0 0 15px #00aaff, 0 0 30px #00aaff;
+            position: relative;
+            display: inline-block;
+        }
+        
+        /* Başlık altındaki çizgi efekti */
+        .main-header-title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, #00ffff, transparent);
+            box-shadow: 0 0 10px #00ffff;
+        }
+
+        /* Avatar Alanı */
+        .avatar-wrapper {
+            width: 130px;
+            height: 130px;
+            margin: 0 auto 25px auto;
+            padding: 5px;
+            border-radius: 50%;
+            /* Dönen neon çerçeve */
+            background: conic-gradient(from 0deg, transparent, #00ffff, #0055ff, transparent);
+            animation: rotateBorder 4s linear infinite;
+            box-shadow: 0 0 25px rgba(0, 200, 255, 0.4);
+        }
+        
+        @keyframes rotateBorder {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .profile-pic {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 4px solid #000510; /* Neon ile resim arasındaki boşluk */
+            background: #000;
+        }
+
+        /* Profil İsmi ve Tag */
+        .profile-name {
+            color: #fff;
+            font-size: 1.6rem;
+            font-weight: 600;
+            margin-bottom: 5px;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+        }
+        
+        .profile-tag {
+            color: #00aaff;
+            font-size: 0.95rem;
+            font-weight: 400;
+            opacity: 0.8;
+            display: block;
+            margin-bottom: 20px;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+        }
+
+        /* Biyografi Yazısı */
+        .profile-bio {
+            color: #d0d0ff;
+            font-size: 1rem;
+            line-height: 1.6;
+            font-style: italic;
+            margin-bottom: 35px;
+            padding: 15px;
+            background: rgba(0, 255, 255, 0.05);
+            border-left: 3px solid #00ffff;
+            border-radius: 0 10px 10px 0;
+            text-align: left;
+        }
+
+        /* Butonlar Alanı */
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .btn {
+            text-decoration: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-size: 0.9rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Kanal Butonu (Ana Mavi) */
+        .btn-channel {
+            background: rgba(0, 255, 255, 0.1);
+            color: #00ffff;
+            border: 1px solid #00ffff;
+        }
+
+        .btn-channel:hover {
+            background: rgba(0, 255, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.5);
+            transform: translateY(-3px);
+        }
+
+        /* Kişisel Buton (Daha Koyu Mavi/Mor) */
+        .btn-personal {
+            background: rgba(50, 100, 255, 0.1);
+            color: #4080ff;
+            border: 1px solid #4080ff;
+        }
+
+        .btn-personal:hover {
+            background: rgba(50, 100, 255, 0.3);
+            box-shadow: 0 0 20px rgba(60, 120, 255, 0.5);
+            transform: translateY(-3px);
+            color: #fff;
+        }
+        
+        .btn i {
+            font-size: 1.1rem;
+        }
+
+        /* Mobil Uyumluluk */
+        @media (max-width: 480px) {
+            .main-header-title { font-size: 2.5rem; }
+            .avatar-wrapper { width: 110px; height: 110px; }
+            .profile-name { font-size: 1.3rem; }
+            .profile-bio { font-size: 0.9rem; padding: 10px; }
+            .btn { width: 100%; justify-content: center; padding: 14px; }
+        }
+    </style>
+</head>
+<body>
+
+    <audio id="bg-music" loop>
+        <source src="Minecraft.m4a" type="audio/mp4">
+    </audio>
+
+    <div id="overlay" onclick="startExperience()">
+        <div class="enter-btn">SİSTEME BAĞLAN</div>
+        <div class="enter-text">Devam etmek için dokunun</div>
+    </div>
+
+    <div class="profile-card-container" id="main-content">
+        
+        <h1 class="main-header-title">SYROX</h1>
+
+        <div class="avatar-wrapper">
+            <img src="pp.png" alt="Syrox Avatar" class="profile-pic">
+        </div>
+
+        <h2 class="profile-name">𝐒𝐲𝐫𝐨𝐱</h2>
+        <span class="profile-tag">#tekyön</span>
+
+        <div class="profile-bio">
+            "𝑯𝒂𝒊𝒏 𝒐𝒍𝒎𝒂𝒌 𝒔𝒖ç𝒔𝒂 𝒚𝒂𝒔𝒂𝒍𝒂𝒓ı ç𝒊ğ𝒏𝒆𝒎𝒆𝒚𝒆 '𝑯𝒂𝒛ı𝒓ı𝒎'." <br>
+            <span style="opacity:0.7; font-size: 0.9em;">-𝑫𝒆𝒍𝒕𝒂 #𝒕𝒆𝒌𝒚ö𝒏</span>
+        </div>
+
+        <div class="action-buttons">
+            <a href="https://t.me/tekparca" target="_blank" class="btn btn-channel">
+                <i class="fab fa-telegram-plane"></i>
+                Kanal
+            </a>
+            <a href="https://t.me/YuceMemoo" target="_blank" class="btn btn-personal">
+                <i class="fas fa-user-astronaut"></i>
+                Kişisel
+            </a>
+        </div>
+    </div>
+
+    <script>
+        // Deneyimi Başlatma Fonksiyonu
+        function startExperience() {
+            var music = document.getElementById("bg-music");
+            var overlay = document.getElementById("overlay");
+            var content = document.getElementById("main-content");
+
+            // Müziği başlat (Ses seviyesi %40)
+            music.volume = 0.4;
+            music.play().catch(error => console.log("Müzik hatası:", error));
+
+            // Giriş ekranını kaldır
+            overlay.style.opacity = "0";
+            setTimeout(function() {
+                overlay.style.display = "none";
+            }, 800);
+
+            // İçerik kartını ekrana getir
+            content.style.opacity = "1";
+            content.style.transform = "translateY(0) scale(1)";
+        }
+    </script>
+
+</body>
+</html>
